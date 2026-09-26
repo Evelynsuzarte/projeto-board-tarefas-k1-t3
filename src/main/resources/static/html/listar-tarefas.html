@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Tilt+Warp&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../images/logo.png">
+    <title>Painel - Meu board</title>
+</head>
+<body>
+
+<header>
+    <nav>
+        <span><a href="index.html"><img class="logo" src="../images/logo2.png" alt="logo"></a></span>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="listar-tarefas.html">Tarefas</a></li>
+            <li><a href="index.html">Perfil</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <section class="listar-tarefa">
+        <h1>Board</h1>
+
+        <form class="formulario-listar-tarefa">
+            <label>Status</label>
+            <select name="status" >
+                <option value="">Selecione o status</option>
+                <option value="todo">To Do (A Fazer)</option>
+                <option value="doing">Doing (Em Andamento)</option>
+                <option value="done">Done (Concluído)</option>
+            </select>
+
+            <button type="submit">Filtrar</button>
+        </form>
+
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Descricao</th>
+                <th>DataTermino</th>
+                <th>Prioridade</th>
+                <th>Categoria</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for tarefa in tarefas %}
+            <tr>
+                <td>{{ tarefa.id }}</td>
+                <td>{{ tarefa.nome }}</td>
+                <td>{{ tarefa.descricao }}</td>
+                <td>{{ tarefa.dataTermino }}</td>
+                <td>{{ tarefa.prioridade }}</td>
+                <td>{{ tarefa.categoria }}</td>
+                <td>{{ tarefa.status }}</td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </section>
+
+<footer>
+    <span>Evelyn Suzarte Fernandes - ACZG 2026.2</span>
+</footer>
+<script src="../js/script.js"></script>
+
+</body>
+</html>

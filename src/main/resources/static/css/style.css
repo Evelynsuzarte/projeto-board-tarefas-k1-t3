@@ -1,0 +1,151 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    display: grid;
+    overflow-x: hidden;
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+        "cabecalho"
+        "conteudo"
+        "rodape";
+    font-family: "Josefin Sans", sans-serif;
+    font-weight: 400;
+    background-color: rgb(212 213 255);
+}
+
+
+button {
+    padding: 9px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 30px;
+    border: 2px solid #ccc;
+    background-color: #fff;
+    transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+    border-color: #00bcd4;
+    color: #00bcd4;
+    box-shadow: 0 0 15px rgba(0, 188, 212, 0.7);
+}
+
+
+.main-inicio{
+    grid-area: conteudo;
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center;     /* Centraliza verticalmente (opcional) */
+    padding: 20px;
+}
+
+
+
+header nav {
+    display: flex;
+    grid-area: conteudo;
+    justify-content: space-around;
+    align-items: center;
+    width: 100vw;
+}
+
+ul {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    list-style: none;
+    width: 25%;
+}
+nav h2 {
+    font-weight: 300;
+}
+
+ul li a {
+    text-decoration: none;
+    color: rgb(36, 36, 36);
+
+}
+
+li a:hover {
+    transform: scale(1.05);
+    border-bottom: 1.3px solid black;
+}
+
+.logo {
+    width: 20%;
+}
+
+.product-grid {
+    display: grid;
+    grid-gap: 2%;
+    grid-area: conteudo;
+    width: 70%;
+    padding: 2% 15%;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2vh;
+    border: 1px solid black;
+    margin: 3% 0%;
+}
+
+.card:hover {
+    transition: 1s;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.product-grid img{
+    border-bottom: 1px solid black;
+    object-fit: cover;
+    height: 20vh;
+    width: 100%;
+}
+
+.card h2{
+    font-weight: 100;
+    text-align: center;
+    width: 20vh;
+    border-bottom: 1px solid black;
+}
+
+.price{
+
+    font-weight: 400;
+    font-size: 3vh;
+}
+
+.price:hover{
+    transition: 1s;
+    transform: scale(1.5);
+}
+
+.status{
+    font-weight: 200;
+    font-size: 3vh;
+}
+
+.out-of-stock{
+    color: rgb(222, 33, 33);
+}
+
+footer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 0;
+    height: 5%;
+    width: 100vw;
+    background-color: #005cc6;
+}

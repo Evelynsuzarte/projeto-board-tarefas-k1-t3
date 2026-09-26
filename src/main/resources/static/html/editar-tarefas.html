@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Tilt+Warp&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../images/logo.png">
+    <title>Editar tarefa - Meu board</title>
+</head>
+<body>
+
+<header>
+    <nav>
+        <span><a href="index.html"><img class="logo" src="../images/logo2.png" alt="logo"></a></span>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="listar-tarefas.html">Tarefas</a></li>
+            <li><a href="index.html">Perfil</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <h1>Editar tarefa</h1>
+    
+    
+    {% if tarefas %}
+    <table>
+        <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Prioridade</th>
+            <th>Categoria</th>
+            <th>Status</th>
+            <th>Data de Término</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for tarefa in tarefas %}
+        <tr>
+            <form method="POST" action="/alterar_tarefa">
+                <input type='hidden' value="{{ tarefa.getId()}}" name="tarefa_id">
+                <td>
+                    <input type="text" name="nome" value="{{ tarefa.getNome() }}">
+                </td>
+
+                <td>
+                    <input type="text" name="descricao" value="{{ tarefa.getDescricao() }}">
+                </td>
+
+                <td>
+                    <input type="number" name="prioridade" value="{{ tarefa.getPrioridade() }}" min="1" max="5" style="width: 60px;">
+                </td>
+
+                <td>
+                    <input type="text" name="categoria" value="{{ tarefa.getCategoria() }}">
+                </td>
+
+                <td>
+                    <select name="status" >
+                        <option value="todo"  {% if tarefa.status_get() == 'todo' %}selected{% endif %}>To Do</option>
+                        <option value="doing" {% if tarefa.status_get() == 'doing' %}selected{% endif %}>Doing</option>
+                        <option value="done"  {% if tarefa.status_get() == 'done' %}selected{% endif %}>Done</option>
+                    </select>
+                </td>
+
+                <td>
+                    <input type="date" name="data_termino" value="{{ tarefa.getDataTermino() }}" >
+                </td>
+
+                <td>
+                    <button type="submit" class="btn-salvar">Salvar</button>
+            </form>
+
+            <!-- BOTÃO EXCLUIR -->
+            <form method="POST" action="/excluir_tarefa" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja excluir esta tarefa?');">
+                <input type="hidden" value="{{tarefa.getId()}}" name="tarefa_id">
+                <button type="submit" class="btn-excluir" style="background-color: #dc3545; color: white; border: none; padding: 4px 8px; cursor: pointer; border-radius: 4px; margin-left: 5px;">
+                    Excluir
+                </button>
+            </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Nenhuma tarefa encontrada.</p>
+    {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</main>
+
+
+
+<footer>
+    <span>Evelyn Suzarte Fernandes - ACZG 2026.2</span>
+</footer>
+<script src="../js/script.js"></script>
+
+</body>
+</html>

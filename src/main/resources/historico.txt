@@ -1,0 +1,7 @@
+1;Estudar Java;Revisar conceitos de POO e colecoes;30/08/2026;done;5;Estudos
+2;Comprar mercado;Comprar leite, ovos, pao e cafe;27/08/2026;todo;3;Casa
+3;Fazer relatorio;Criar relatorio financeiro mensal;01/09/2026;doing;4;Trabalho
+4;Lavar o carro;Lavar e aspirar o interior do carro;28/08/2026;todo;2;Pessoal
+5;Terminar API;Finalizar os endpoints do sistema;10/09/2026;doing;5;Desenvolvimento
+6;Ler livro;Ler capitulo 3 do livro de fantasia;05/09/2026;done;5;Lazer
+7;Lavar roupa;Preciso lavar as roupas de cama;06/09/2026;todo;4;Casa

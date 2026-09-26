@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Tilt+Warp&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../images/logo.png">
+    <title>Criar tarefa - Meu board</title>
+</head>
+<body>
+
+<header>
+    <nav>
+        <span><a href="index.html"><img class="logo" src="../images/logo2.png" alt="logo"></a></span>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="listar-tarefas.html">Tarefas</a></li>
+            <li><a href="index.html">Perfil</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+
+    <section class="adicionar-tarefa">
+        <h2>Criar tarefa</h2>
+        <form class="formulario-adicionar-tarefa">
+            <div class="form-nome">
+                <label>Nome:</label>
+                <input type="text" placeholder="Nome da tarefa">
+            </div>
+            <div class="form-descricao">
+                <label>Descrição:</label>
+                <textarea placeholder="Descrição da tarefa"></textarea>
+            </div>
+            <div class="form-prioridade">
+                <label>Prioridade:</label>
+                <input type="number" placeholder="Ex: 1 (Baixa) a 5 (Alta)">
+            </div>
+            <div class="form-categoria">
+                <label>Categoria:</label>
+                <input type="text" placeholder="Ex: Estudos, Trabalho">
+            </div>
+            <div class="form-status">
+                <label>Status:</label>
+                <select name="status" >
+                    <option value="">Selecione o status</option>
+                    <option value="todo">To Do (A Fazer)</option>
+                    <option value="doing">Doing (Em Andamento)</option>
+                    <option value="done">Done (Concluído)</option>
+                </select>
+            </div>
+            <div class="form-dataTermino">
+                <label>Data de Término:</label>
+                <input type="date">
+            </div>
+
+            <button type="submit" class="btn-enviar">Criar Tarefa</button>
+        </form>
+    </section>
+
+
+<footer>
+    <span>Evelyn Suzarte Fernandes - ACZG 2026.2</span>
+</footer>
+<script src="../js/script.js"></script>
+
+</body>
+</html>
