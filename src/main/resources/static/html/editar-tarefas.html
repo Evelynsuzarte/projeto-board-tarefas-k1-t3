@@ -22,11 +22,22 @@
 </header>
 
 <main>
-    <h1>Editar tarefa</h1>
-    
-    
-    {% if tarefas %}
-    <table>
+    <h1>Minhas tarefas</h1>
+
+    <form class="formulario-listar-tarefa">
+        <label>Status</label>
+        <select name="status" >
+            <option value="">Selecione o status</option>
+            <option value="todo">To Do (A Fazer)</option>
+            <option value="doing">Doing (Em Andamento)</option>
+            <option value="done">Done (Concluído)</option>
+        </select>
+
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <!--{% if tarefas %}-->
+    <table class="formulario-listar-tarefa-table">
         <thead>
         <tr>
             <th>Nome</th>
@@ -39,9 +50,9 @@
         </tr>
         </thead>
         <tbody>
-        {% for tarefa in tarefas %}
+        <!--{% for tarefa in tarefas %}-->
         <tr>
-            <form method="POST" action="/alterar_tarefa">
+            <form class="formulario-listar" method="POST" action="/alterar_tarefa">
                 <input type='hidden' value="{{ tarefa.getId()}}" name="tarefa_id">
                 <td>
                     <input type="text" name="nome" value="{{ tarefa.getNome() }}">
@@ -52,7 +63,7 @@
                 </td>
 
                 <td>
-                    <input type="number" name="prioridade" value="{{ tarefa.getPrioridade() }}" min="1" max="5" style="width: 60px;">
+                    <input type="number" name="prioridade" value="{{ tarefa.getPrioridade() }}" min="1" max="5">
                 </td>
 
                 <td>
@@ -75,7 +86,7 @@
                     <button type="submit" class="btn-salvar">Salvar</button>
             </form>
 
-            <!-- BOTÃO EXCLUIR -->
+
             <form method="POST" action="/excluir_tarefa" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja excluir esta tarefa?');">
                 <input type="hidden" value="{{tarefa.getId()}}" name="tarefa_id">
                 <button type="submit" class="btn-excluir" style="background-color: #dc3545; color: white; border: none; padding: 4px 8px; cursor: pointer; border-radius: 4px; margin-left: 5px;">
@@ -84,32 +95,11 @@
             </form>
             </td>
         </tr>
-        {% endfor %}
+        <!--{% endfor %}-->
         </tbody>
     </table>
-    {% else %}
-    <p>Nenhuma tarefa encontrada.</p>
-    {% endif %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 </main>
-
-
 
 <footer>
     <span>Evelyn Suzarte Fernandes - ACZG 2026.2</span>
