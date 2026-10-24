@@ -1,6 +1,8 @@
 package boardTarefas.controller;
 
 import boardTarefas.model.Tarefa;
+import boardTarefas.repository.TarefaRepository;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.time.LocalDate;
@@ -13,73 +15,23 @@ import java.time.format.DateTimeFormatter;
 public class TarefaController {
     DateTimeFormatter formatoBR = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    public void salvar(List<Tarefa> tarefas){
-        File arquivo = new File("src/main/resources/historico.txt");
+    private TarefaRepository repositorio = new TarefaRepository();
 
+    public void salvar(List<Tarefa> tarefas) {
         try {
-            FileWriter escritor = new FileWriter(arquivo);
-            for (Tarefa t:tarefas){
-                escritor.write(
-                    t.getId() + ";" +
-                    t.getNome() + ";" +
-                    t.getDescricao() + ";" +
-                    t.getDataTermino().format(formatoBR) + ";" +
-                    t.getStatus() + ";" +
-                    t.getPrioridade() + ";" +
-                    t.getCategoria() + "\n"
-                );
-            }
-            escritor.close();
-
+            repositorio.salvar(tarefas);
         } catch (IOException e) {
             System.out.println("Erro ao salvar tarefas: " + e.getMessage());
         }
     }
 
-    public List<Tarefa> carregar(){
-        List<Tarefa> tarefas = new ArrayList<>();
-        File arquivo = new File("src/main/resources/historico.txt");
-
-        if (!arquivo.exists()) {
-            return tarefas;
-        }
-
+    public List<Tarefa> carregar() {
         try {
-            Scanner scanner = new Scanner(arquivo);
-            while (scanner.hasNextLine()) {
-
-                String linha = scanner.nextLine();
-                String[] dados = linha.split(";");
-
-                int id = parseInt(dados[0]);
-                String nome = dados[1];
-                String descricao = dados[2];
-                LocalDate dataTermino = LocalDate.parse(dados[3],formatoBR);
-                String status = dados[4];
-                int prioridade = parseInt(dados[5]);
-                String categoria = dados[6];
-
-
-                Tarefa tarefa = new Tarefa(
-                        id,
-                        nome,
-                        descricao,
-                        dataTermino,
-                        status,
-                        prioridade,
-                        categoria
-                );
-
-                tarefas.add(tarefa);
-
-            }
-            scanner.close();
-            tarefas.sort(Comparator.comparingInt(Tarefa::getPrioridade).reversed());
-
+            return repositorio.carregar();
         } catch (IOException e) {
             System.out.println("Erro ao carregar tarefas: " + e.getMessage());
+            return new ArrayList<>();
         }
-        return tarefas;
     }
 
     public List<Tarefa> criar (List<Tarefa> tarefas, int id, String nome, String descricao, LocalDate dataTermino, String status, int prioridade, String categoria){
@@ -220,26 +172,7 @@ public class TarefaController {
 //    }
 
 
-    public void listarTodas (List<Tarefa> tarefas){
-        tarefas.sort(Comparator.comparingInt(Tarefa::getPrioridade).reversed());
 
-        String formato = "%-4s | %-15s | %-10s | %-8s | %-20s | %-12s | %s%n";
-        System.out.println("\n====================================================================================================================");
-        System.out.printf(formato, "ID", "CATEGORIA", "PRIORIDADE", "STATUS", "NOME", "DATA", "DESCRICAO");
-        System.out.println("--------------------------------------------------------------------------------------------------------------------");
-        for (Tarefa t : tarefas){
-            System.out.printf(formato,
-                    t.getId(),
-                    t.getCategoria(),
-                    t.getPrioridade(),
-                    t.getStatus().toUpperCase(),
-                    t.getNome(),
-                    t.getDataTermino().format(formatoBR),
-                    t.getDescricao()
-            );
-        }
-        System.out.println("====================================================================================================================\n");
-    }
 
 //    public void listarUnico (List<Tarefa> tarefas, int id){
 //        System.out.println("ID\tCATEGORIA\tPRIORIDADE\tSTATUS\tNOME\tDESCRICAO\tDATA TERMINO");
@@ -250,51 +183,6 @@ public class TarefaController {
 //        }
 //    }
 
-    public void listarUnico (List<Tarefa> tarefas, int id){
-        String formato = "%-4s | %-15s | %-10s | %-8s | %-20s | %-12s | %s%n";
-        System.out.println("\n====================================================================================================================");
-        System.out.printf(formato, "ID", "CATEGORIA", "PRIORIDADE", "STATUS", "NOME", "DATA", "DESCRICAO");
-        System.out.println("--------------------------------------------------------------------------------------------------------------------");
-        for (Tarefa t : tarefas){
-            if (t.getId() == id) {
-                System.out.printf(formato,
-                        t.getId(),
-                        t.getCategoria(),
-                        t.getPrioridade(),
-                        t.getStatus().toUpperCase(),
-                        t.getNome(),
-                        t.getDataTermino().format(formatoBR),
-                        t.getDescricao()
-                );
-                break;
-            }
-        }
-        System.out.println("====================================================================================================================\n");
-    }
-
-
-    public void listarCategorias(List<Tarefa> tarefas) {
-        Set<String> categorias = new HashSet<>();
-
-        for (Tarefa t : tarefas) {
-            categorias.add(t.getCategoria());
-        }
-
-        for (String categoria : categorias) {
-            System.out.println(categoria);
-        }
-    }
-
-    public void menuPrincipal(){
-        System.out.println("======== GERENCIADOR DE TAREFAS - TO DO LIST ========");
-        System.out.println("1 - VER TODAS AS TAREFAS");
-        System.out.println("2 - PESQUISA DETALHADA");
-        System.out.println("3 - CRIAR TAREFA");
-        System.out.println("4 - ALTERAR TAREFA");
-        System.out.println("5 - APAGAR TAREFA");
-        System.out.println("0 - SAIR");
-        System.out.println("===== ESCOLHA:");
-    }
 
 
 

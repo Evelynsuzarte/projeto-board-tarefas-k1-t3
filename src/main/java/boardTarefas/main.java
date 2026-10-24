@@ -10,6 +10,8 @@
 package boardTarefas;
 import boardTarefas.controller.TarefaController;
 import boardTarefas.model.Tarefa;
+import boardTarefas.view.Menu;
+import boardTarefas.view.TarefaView;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ public class main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         TarefaController gerenciador = new TarefaController();
+        Menu menu = new Menu();
+        TarefaView tarefaView = new TarefaView();
         List<Tarefa> tarefas = new ArrayList<>();
         tarefas = gerenciador.carregar();
         DateTimeFormatter formatoBR = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -35,14 +39,14 @@ public class main {
         int opcao, opcao2, opcao3;
 
         do{
-            gerenciador.menuPrincipal();
+            menu.menuPrincipal();
 
             opcao = scanner.nextInt();
             scanner.nextLine();
             switch (opcao) {
                 case 1:
-                    System.out.println("======== TODAS AS TAREFAS ========");
-                    gerenciador.listarTodas(tarefas);
+                    menu.tituloTodas();
+                    tarefaView.listarTodas(tarefas);
                     break;
 
                 case 2:
@@ -50,19 +54,14 @@ public class main {
                     String opcao_texto = "";
                     String texto = "";
 
-                    System.out.println("======== PESQUISA DETALHADA ========");
-                    System.out.println("Pesquisar por:");
-                    System.out.println("1 - CATEGORIA");
-                    System.out.println("2 - PRIORIDADE");
-                    System.out.println("3 - STATUS");
-                    System.out.println("===== ESCOLHA:");
+                    menu.menuPesquisa();
                     opcao2 = scanner.nextInt();
                     scanner.nextLine();
 
                     if (opcao2 == 1){
                         opcao_texto = "categoria";
                         System.out.println("CATEGORIAS DISPONÍVEIS");
-                        gerenciador.listarCategorias(tarefas);
+                        tarefaView.listarCategorias(tarefas);
 
                         System.out.println("==== ESCOLHA A CATEGORIA");
                         texto = scanner.nextLine();
@@ -73,14 +72,11 @@ public class main {
                         System.out.println("==== ESCOLHA A PRIORIDADE");
                         texto = scanner.nextLine();
 
-
                     } else if (opcao2 == 3){
                         opcao_texto = "status";
 
-                        System.out.println("==== ESCOLHA O STATUS");
-                        System.out.println("1 - TODO\n2 - DOING\n3 - DONE");
+                        menu.menuStatus();
                         texto = scanner.nextLine();
-
 
                         if (texto.equals("1")){
                             texto = "todo";
@@ -90,7 +86,8 @@ public class main {
                             texto = "done";
                         }
                     }
-                    System.out.println("*** ADICIONAR FILTRO DE DATA? ****\n1 - SIM\n2 - NAO");
+
+                    menu.menuFiltroData();
                     opcao3 = scanner.nextInt();
                     scanner.nextLine();
 
@@ -108,7 +105,7 @@ public class main {
                         if (busca.isEmpty()){
                             System.out.println("Nenhuma tarefa encontrada, verifique corretamente!");
                         } else{
-                            gerenciador.listarTodas(busca);
+                            tarefaView.listarTodas(busca);
                         }
                     }
                     else if (opcao3 == 2){
@@ -117,12 +114,13 @@ public class main {
                         if (busca.isEmpty()){
                             System.out.println("Nenhuma tarefa encontrada, verifique corretamente!");
                         } else{
-                            gerenciador.listarTodas(busca);
+                            tarefaView.listarTodas(busca);
                         }
                     }
                     break;
+
                 case 3:
-                    System.out.println("======== CRIAR TAREFA ========= ");
+                    menu.tituloCriar();
                     System.out.println("NOME = ");
                     nome = scanner.nextLine();
                     System.out.println("DESCRICAO = ");
@@ -145,26 +143,17 @@ public class main {
                     break;
 
                 case 4:
-                    System.out.println("======== ALTERAR TAREFA ========= ");
-                    gerenciador.listarTodas(tarefas);
+                    menu.tituloAlterar();
+                    tarefaView.listarTodas(tarefas);
 
-
-                    System.out.println("\n=== DIGITE O NÚMERO DO ID DA TAREFA: ");
+                    menu.pedirIdAlterar();
                     id = scanner.nextInt();
                     scanner.nextLine();
 
-                    System.out.println("===== TAREFA SELECIONADA:");
-                    gerenciador.listarUnico(tarefas,id);
+                    menu.tarefaSelecionada();
+                    tarefaView.listarUnico(tarefas,id);
 
-
-                    System.out.println("======== SELECIONE A AÇÃO");
-                    System.out.println("1 - MUDAR STATUS (todo, doing, done) ");
-                    System.out.println("2 - MUDAR NOME");
-                    System.out.println("3 - MUDAR DESCRIÇÃO");
-                    System.out.println("4 - MUDAR PRIORIDADE");
-                    System.out.println("5 - MUDAR CATEGORIA");
-                    System.out.println("6 - MUDAR DATA DE TÉRMINO (dd/mm/aaaa)");
-                    System.out.println("===== ESCOLHA:");
+                    menu.menuAlterar();
                     opcao2 = scanner.nextInt();
                     scanner.nextLine();
                     System.out.print("Digite a nova informação: ");
@@ -196,20 +185,19 @@ public class main {
                             gerenciador.alterar(tarefas, id, "data", dataFormatada.toString());
                             System.out.println("Data de término atualizada com sucesso!");
                             break;
-
                     }
-                break;
+                    break;
+
                 case 5:
-                    System.out.println("======== APAGAR TAREFA ========= ");
-                    gerenciador.listarTodas(tarefas);
+                    menu.tituloApagar();
+                    tarefaView.listarTodas(tarefas);
 
-
-                    System.out.println("\n=== DIGITE O NÚMERO DO ID DA TAREFA PARA APAGAAR: ");
+                    menu.pedirIdApagar();
                     id = scanner.nextInt();
                     scanner.nextLine();
 
-                    System.out.println("===== TAREFA SELECIONADA:");
-                    gerenciador.listarUnico(tarefas,id);
+                    menu.tarefaSelecionada();
+                    tarefaView.listarUnico(tarefas,id);
 
                     List<Tarefa> tarefasDel = gerenciador.deletar(tarefas, id);
                     if (tarefasDel == null){
@@ -225,6 +213,5 @@ public class main {
 
         gerenciador.salvar(tarefas);
         scanner.close();
-
     }
 }
