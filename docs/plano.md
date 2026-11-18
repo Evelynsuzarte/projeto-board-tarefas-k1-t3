@@ -37,7 +37,7 @@ Este plano divide a implementação das duas features especificadas em [docs/spe
     - Compilar e subir o servidor: `.\gradlew.bat classes` e `java -cp build/classes/java/main boardTarefas.Server`.
     - Testar manualmente via `curl` ou PowerShell (`Invoke-RestMethod`) os fluxos `GET`, `POST`, `PUT`, `DELETE`, sanitização de `;`, erro `400` e `404`, verificando a atualização imediata em `src/main/resources/historico.txt`.
 
-- [ ] **4. Integrar `script.js` à API HTTP (substituindo `localStorage` na camada de dados)**
+- [x] **4. Integrar `script.js` à API HTTP (substituindo `localStorage` na camada de dados)**
   - **O que será feito:**
     - Configurar `API_BASE_URL` (`/api/tarefas` na porta `8080` e fallback `http://localhost:8080/api/tarefas` em `file://` ou outra porta).
     - Substituir `localStorage` (`"meuBoard"`) e `tarefasPadrao` por chamadas `fetch` (`async/await`) para listar (`GET`), criar (`POST`), editar (`PUT`) e excluir (`DELETE`).
