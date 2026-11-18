@@ -49,13 +49,14 @@ Este plano divide a implementação das duas features especificadas em [docs/spe
     - Com `boardTarefas.Server` rodando, abrir `http://localhost:8080/`, criar uma tarefa em `criar-tarefa.html`, editar/excluir em `editar-tarefas.html` e conferir no console (`boardTarefas.main`) que `historico.txt` reflete tudo.
     - Desligar o servidor, abrir `editar-tarefas.html` e confirmar que o banner de servidor offline aparece e não injeta `tarefasPadrao`.
 
-- [ ] **5. Criar testes automatizados JUnit 6 para o Backend**
-  - **O que será feito:** Criar suíte de testes unitários (usando diretório/arquivo temporário para não alterar `src/main/resources/historico.txt`) cobrindo:
+- [x] **5. Criar testes automatizados em Spock para o Backend**
+  - **O que será feito:** Configurar o plugin Groovy e o **Spock Framework** no `build.gradle` e criar suíte de especificações Spock (usando `@TempDir` para não alterar `src/main/resources/historico.txt`) cobrindo:
     - Sanitização de `;` e `\n` e validações de campos (`status`, `prioridade`, `dataTermino`).
     - Serialização/desserialização JSON (incluindo `LocalDate` ↔ `yyyy-MM-dd`).
     - CRUD, geração de `proximoId`, filtros de `buscar(...)` e ordenação por prioridade decrescente em `TarefaController`/`TarefaRepository`.
   - **Arquivos criados ou alterados:**
-    - Criar: `src/test/java/boardTarefas/TarefaControllerTest.java` (e testes auxiliares para o JSON do `Server`, se aplicável)
+    - Alterar: `build.gradle`
+    - Criar: `src/test/groovy/boardTarefas/TarefaControllerSpec.groovy` e `src/test/groovy/boardTarefas/ServerJsonSpec.groovy`
   - **Como validar:**
     - Executar `.\gradlew.bat test` e confirmar que todos os testes passam (`BUILD SUCCESSFUL` sem `NO-SOURCE`).
 
@@ -63,10 +64,10 @@ Este plano divide a implementação das duas features especificadas em [docs/spe
 
 ## Parte B — Feature 2: Alarme de Proximidade do Prazo das Tarefas (Frontend)
 
-- [ ] **6. Atualizar formulários HTML para prazo com data/hora e campos de alarme**
+- [x] **6. Atualizar formulários HTML para prazo com data/hora e campos de alarme**
   - **O que será feito:**
-    - Em `criar-tarefa.html`: trocar `<input type="date">` por `<input type="datetime-local">` e adicionar checkbox/switch para ativar alarme e `<select>` de antecedência (`15 min`, `30 min`, `1h`, `2h` [padrão], `24h`).
-    - Em `editar-tarefas.html`: adicionar colunas/controles na tabela para ativar/desativar alarme e alterar a antecedência em linha, compatível com `datetime-local`.
+    - Em `criar-tarefa.html`: trocar `<input type="date">` por `<input type="datetime-local">` e adicionar checkbox/switch para ativar alarme, `<select>` de antecedência (`15 min`, `30 min`, `1h`, `2h` [padrão], `24h`, `Personalizado`) e campo numérico para tempo personalizado em minutos.
+    - Em `editar-tarefas.html`: adicionar colunas/controles na tabela para ativar/desativar alarme e alterar a antecedência em linha (pré-definida ou personalizada em minutos), compatível com `datetime-local`.
   - **Arquivos criados ou alterados:**
     - Alterar: `src/main/resources/static/html/criar-tarefa.html`
     - Alterar: `src/main/resources/static/html/editar-tarefas.html`

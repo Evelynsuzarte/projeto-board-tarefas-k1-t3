@@ -79,7 +79,7 @@ Atualmente, o sistema opera com duas interfaces isoladas:
 - `src/main/java/boardTarefas/controller/TarefaController.java`: Sanitização de `;`/`\n`, uso de `.equals(...)` em comparações de `String` e execução sobre estado atualizado do arquivo.
 - `src/main/java/boardTarefas/repository/TarefaRepository.java`: Sincronização (`synchronized`) e tratamento seguro de arquivo ausente/vazio.
 - `src/main/resources/static/js/script.js`: Substituição de `localStorage` (`"meuBoard"`) e `tarefasPadrao` por chamadas `fetch` (`async/await`), tratamento de erros/offline e bloqueio de múltiplos cliques durante requisições.
-- `src/test/java/boardTarefas/`: Adição de testes JUnit Jupiter cobrindo JSON, sanitização, validações e regras do controller/repository.
+- `src/test/groovy/boardTarefas/` e `build.gradle`: Adição de testes em **Spock** (Groovy + Spock Framework) cobrindo JSON, sanitização, validações e regras do controller/repository. No frontend (JS), eventuais testes devem utilizar o framework de testes do projeto (atualmente não há framework de testes JS configurado no repositório).
 
 ### 1.5. Fora do Escopo (Feature 1)
 
@@ -103,7 +103,7 @@ Implementar um sistema de alarme na interface web para alertar o usuário quando
 
 1. **Ativação e Configuração do Alarme:**
    - Ao criar (`criar-tarefa.html`) ou editar (`editar-tarefas.html`) uma tarefa, o usuário pode optar por ativar ou desativar o alarme (checkbox/switch).
-   - O usuário pode definir a janela de antecedência em relação ao prazo final por meio de opções pré-definidas (ex.: `15 min`, `30 min`, `1h`, `2h` [padrão = `120` minutos], `24h`) ou campo numérico equivalente.
+   - O usuário pode definir a janela de antecedência em relação ao prazo final escolhendo entre opções pré-definidas (ex.: `15 min`, `30 min`, `1h`, `2h` [padrão = `120` minutos], `24h`) **ou** informando um tempo personalizado (em minutos) conforme desejar.
 2. **Prazo com Data e Hora:**
    - Substituir `<input type="date">` por `<input type="datetime-local">` em `criar-tarefa.html` e `editar-tarefas.html` para permitir o cálculo preciso da antecedência em horas/minutos.
 3. **Verificação e Disparo:**
@@ -111,11 +111,12 @@ Implementar um sistema de alarme na interface web para alertar o usuário quando
    - Regra de disparo: dispara quando `alarme === true`, `status !== "done"`, `alarmeDisparado === false` e `agora >= (dataTermino - antecedenciaMinutos)`.
 4. **Tarefas Concluídas:**
    - Tarefas com status `"done"` (Concluída) **não** devem disparar alarmes.
-5. **Controle de Múltiplos Disparos e Reconfiguração:**
-   - Uma vez disparado, `alarmeDisparado` é marcado como `true` para evitar múltiplos disparos repetitivos.
-   - Em `editar-tarefas.html`, se o usuário alterar o prazo (`dataTermino`) ou reconfigurar o alarme/antecedência, `alarmeDisparado` é resetado para `false`.
+5. **Controle de Múltiplos Disparos, Persistência e Reconfiguração:**
+   - Uma vez disparado, o alarme é registrado como ativo/disparado (`alarmeDisparado: true`, com estado persistido no cliente) para evitar duplicação, **mantendo-se visível em qualquer página da aplicação** (`index.html`, `criar-tarefa.html`, `editar-tarefas.html`) mesmo ao navegar ou recarregar, **até que o usuário clique explicitamente em "Dispensar"**.
+   - Ao clicar em **"Dispensar"**, os alarmes atualmente exibidos são marcados como dispensados (`alarmeDispensado: true`) e deixam de ser exibidos nas páginas.
+   - Em `editar-tarefas.html`, se o usuário alterar o prazo (`dataTermino`) ou reconfigurar o alarme/antecedência, `alarmeDisparado` e `alarmeDispensado` são resetados para `false`.
 6. **Exibição Visual:**
-   - Os alarmes disparados são exibidos em um banner/painel visual de alertas na própria página.
+   - Os alarmes ativos (disparados e ainda não dispensados) são exibidos em um banner/painel visual de alertas em qualquer página do frontend, com o botão **"Dispensar"** para encerrar a exibição.
 7. **Retrocompatibilidade:**
    - Tarefas já existentes sem os novos atributos de alarme devem assumir `alarme: false`, `antecedenciaMinutos: 120` e `alarmeDisparado: false` por padrão.
 
@@ -141,6 +142,7 @@ Implementar um sistema de alarme na interface web para alertar o usuário quando
 - **Estrutura de Dados (`script.js`):** Adição dos atributos `alarme` (`boolean`), `antecedenciaMinutos` (`number`) e `alarmeDisparado` (`boolean`) nos objetos de tarefa.
 - **Interface de Criação e Edição:** Inclusão dos campos de alarme e antecedência em `criar-tarefa.html` e na tabela de edição em linha de `editar-tarefas.html`, além da troca de `input type="date"` para `input type="datetime-local"`.
 - **Listagem e Filtros:** Garantir que a exibição da tabela e os filtros por `status` (`todo`, `doing`, `done`) continuem funcionando corretamente com as novas propriedades.
+- **Testes:** Eventuais testes automatizados de JavaScript devem seguir o framework de testes do projeto (atualmente sem framework JS configurado no repositório).
 
 ### 2.5. Fora do Escopo (Feature 2)
 

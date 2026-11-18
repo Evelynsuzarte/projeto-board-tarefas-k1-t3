@@ -52,8 +52,26 @@
                 </select>
             </div>
             <div class="form-dataTermino">
-                <label>Data de Término:</label>
-                <input type="date">
+                <label>Data e Hora de Término:</label>
+                <input type="datetime-local">
+            </div>
+            <div class="form-alarme">
+                <label for="alarme">Ativar alarme:</label>
+                <input type="checkbox" id="alarme" name="alarme">
+            </div>
+            <div class="form-antecedencia">
+                <label for="antecedencia">Antecedência:</label>
+                <div class="antecedencia-controles">
+                    <select id="antecedencia" name="antecedenciaMinutos">
+                        <option value="15">15 minutos antes</option>
+                        <option value="30">30 minutos antes</option>
+                        <option value="60">1 hora antes</option>
+                        <option value="120" selected>2 horas antes (padrão)</option>
+                        <option value="1440">24 horas antes</option>
+                        <option value="custom">Personalizado (min)</option>
+                    </select>
+                    <input type="number" id="antecedencia-custom" class="antecedencia-custom" min="1" placeholder="Minutos" style="display: none;">
+                </div>
             </div>
 
             <button type="submit" class="btn-enviar">Criar Tarefa</button>
