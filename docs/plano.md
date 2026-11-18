@@ -25,7 +25,7 @@ Este plano divide a implementação das duas features especificadas em [docs/spe
     - Executar `.\gradlew.bat classes`.
     - Rodar `java -cp build/classes/java/main boardTarefas.main` manualmente e testar listar, pesquisar, criar, alterar e apagar para confirmar que o modo console continua idêntico.
 
-- [ ] **3. Criar `boardTarefas.Server` com API REST/JSON, CORS e arquivos estáticos**
+- [x] **3. Criar `boardTarefas.Server` com API REST/JSON, CORS e arquivos estáticos**
   - **O que será feito:**
     - Criar `boardTarefas.Server` usando `com.sun.net.httpserver.HttpServer` na porta `8080`.
     - Implementar parser/serializer JSON nativo (com `dataTermino` em `yyyy-MM-dd` e escape de caracteres) e cabeçalhos CORS (`*`, `GET, POST, PUT, DELETE, OPTIONS`).
