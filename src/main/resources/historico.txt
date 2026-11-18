@@ -4,4 +4,5 @@
 3;Fazer relatorio;Criar relatorio financeiro mensal;01/09/2026;doing;4;Trabalho
 7;Lavar roupa;Preciso lavar as roupas de cama;06/09/2026;todo;4;Casa
 2;Comprar mercado;Comprar leite, ovos, pao e cafe;27/08/2026;todo;3;Casa
+8;teste;teste;18/11/2026;todo;3;casa
 4;Lavar o carro;Lavar e aspirar o interior do carro;28/08/2026;todo;2;Pessoal

@@ -46,6 +46,8 @@
             <th>Categoria</th>
             <th>Status</th>
             <th>Data de Término</th>
+            <th>Alarme</th>
+            <th>Antecedência</th>
             <th>Ações</th>
         </tr>
         </thead>
@@ -79,7 +81,23 @@
                 </td>
 
                 <td>
-                    <input type="date" name="data_termino" value="{{ tarefa.getDataTermino() }}" >
+                    <input type="datetime-local" name="data_termino" value="{{ tarefa.getDataTermino() }}" >
+                </td>
+
+                <td>
+                    <input type="checkbox" name="alarme">
+                </td>
+
+                <td>
+                    <select name="antecedenciaMinutos">
+                        <option value="15">15 min</option>
+                        <option value="30">30 min</option>
+                        <option value="60">1 hora</option>
+                        <option value="120" selected>2 horas</option>
+                        <option value="1440">24 horas</option>
+                        <option value="custom">Personalizado (min)</option>
+                    </select>
+                    <input type="number" name="antecedenciaCustom" class="antecedencia-custom" min="1" placeholder="Min" style="display: none;">
                 </td>
 
                 <td>
