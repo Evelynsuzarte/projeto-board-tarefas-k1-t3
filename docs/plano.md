@@ -75,7 +75,7 @@ Este plano divide a implementação das duas features especificadas em [docs/spe
   - **Como validar:**
     - Abrir `criar-tarefa.html` e `editar-tarefas.html` no navegador e verificar visualmente se todos os campos renderizam sem quebrar o layout nem os filtros por `status`.
 
-- [ ] **7. Implementar lógica de alarme, verificação periódica e painel visual no `script.js`**
+- [x] **7. Implementar lógica de alarme, verificação periódica e painel visual no `script.js`**
   - **O que será feito:**
     - Estender o modelo de tarefa no frontend com `alarme` (`boolean`), `antecedenciaMinutos` (`number`, padrão `120`), `alarmeDisparado` (`boolean`) e `alarmeDispensado` (`boolean`), assumindo `alarme: false` para tarefas antigas sem esses campos.
     - Na edição em linha (`editar-tarefas.html`), resetar `alarmeDisparado` e `alarmeDispensado` para `false` quando o prazo (`dataTermino`) ou a configuração do alarme forem alterados.
