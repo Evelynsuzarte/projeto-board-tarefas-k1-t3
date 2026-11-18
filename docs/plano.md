@@ -77,10 +77,10 @@ Este plano divide a implementação das duas features especificadas em [docs/spe
 
 - [ ] **7. Implementar lógica de alarme, verificação periódica e painel visual no `script.js`**
   - **O que será feito:**
-    - Estender o modelo de tarefa no frontend com `alarme` (`boolean`), `antecedenciaMinutos` (`number`, padrão `120`) e `alarmeDisparado` (`boolean`), assumindo `alarme: false` para tarefas antigas sem esses campos.
-    - Na edição em linha (`editar-tarefas.html`), resetar `alarmeDisparado` para `false` quando o prazo (`dataTermino`) ou a configuração do alarme forem alterados.
-    - Implementar função de verificação executada ao carregar a página e periodicamente via `setInterval` (a cada 30s/1min): dispara quando `alarme === true`, `status !== "done"`, `!alarmeDisparado` e `agora >= (dataTermino - antecedenciaMinutos)`.
-    - Exibir os alarmes disparados em um painel/banner visual na página e marcar `alarmeDisparado = true` para evitar disparos repetidos.
+    - Estender o modelo de tarefa no frontend com `alarme` (`boolean`), `antecedenciaMinutos` (`number`, padrão `120`), `alarmeDisparado` (`boolean`) e `alarmeDispensado` (`boolean`), assumindo `alarme: false` para tarefas antigas sem esses campos.
+    - Na edição em linha (`editar-tarefas.html`), resetar `alarmeDisparado` e `alarmeDispensado` para `false` quando o prazo (`dataTermino`) ou a configuração do alarme forem alterados.
+    - Implementar função de verificação executada ao carregar qualquer página e periodicamente via `setInterval` (a cada 30s/1min): dispara quando `alarme === true`, `status !== "done"`, `!alarmeDisparado` e `agora >= (dataTermino - antecedenciaMinutos)`.
+    - Exibir os alarmes ativos (`alarmeDisparado && !alarmeDispensado`) em um painel/banner visual persistente em qualquer página (`index.html`, `criar-tarefa.html`, `editar-tarefas.html`) até o usuário clicar em **Dispensar** (`alarmeDispensado = true`).
     - Garantir compatibilidade de `dataTermino` (`datetime-local`) com o envio à API da Feature 1 (ex.: extraindo `yyyy-MM-dd` para o backend atual enquanto os campos de alarme permanecem no cliente).
   - **Arquivos criados ou alterados:**
     - Alterar: `src/main/resources/static/js/script.js`

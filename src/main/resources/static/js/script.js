@@ -80,7 +80,8 @@ function enriquecerComAlarmes(listaBackend) {
             dataTerminoCompleta: dataCompletaSalva,
             alarme: salvo ? Boolean(salvo.alarme) : false,
             antecedenciaMinutos: salvo ? (Number(salvo.antecedenciaMinutos) || ANTECEDENCIA_PADRAO_MINUTOS) : ANTECEDENCIA_PADRAO_MINUTOS,
-            alarmeDisparado: salvo ? Boolean(salvo.alarmeDisparado) : false
+            alarmeDisparado: salvo ? Boolean(salvo.alarmeDisparado) : false,
+            alarmeDispensado: salvo ? Boolean(salvo.alarmeDispensado) : false
         };
     });
 }
@@ -159,6 +160,19 @@ function obterOuCriarPainelAlarmes() {
 }
 
 function dispensarPainelAlarmes() {
+    tarefas.forEach(tarefa => {
+        if (tarefa.alarmeDisparado && !tarefa.alarmeDispensado) {
+            tarefa.alarmeDispensado = true;
+            salvarConfigAlarmeCliente(tarefa.id, {
+                dataTerminoCompleta: tarefa.dataTerminoCompleta,
+                alarme: tarefa.alarme,
+                antecedenciaMinutos: tarefa.antecedenciaMinutos,
+                alarmeDisparado: true,
+                alarmeDispensado: true
+            });
+        }
+    });
+
     const painel = document.getElementById("painel-alarmes");
     const lista = document.getElementById("lista-alarmes-disparados");
     if (lista) {
@@ -176,9 +190,35 @@ function formatarDataHoraExibicao(dataCompleta) {
     return dataCompleta.replace("T", " ");
 }
 
+function renderizarPainelAlarmes() {
+    const ativos = tarefas.filter(tarefa =>
+        tarefa.alarme &&
+        tarefa.status !== "done" &&
+        tarefa.alarmeDisparado &&
+        !tarefa.alarmeDispensado
+    );
+
+    if (ativos.length === 0) {
+        const painelExistente = document.getElementById("painel-alarmes");
+        if (painelExistente) {
+            painelExistente.style.display = "none";
+        }
+        return;
+    }
+
+    const painel = obterOuCriarPainelAlarmes();
+    const lista = document.getElementById("lista-alarmes-disparados");
+    lista.innerHTML = "";
+    ativos.forEach(tarefa => {
+        const item = document.createElement("li");
+        item.textContent = `Tarefa "${tarefa.nome}" vence em ${formatarDataHoraExibicao(tarefa.dataTerminoCompleta)} (status: ${tarefa.status}).`;
+        lista.appendChild(item);
+    });
+    painel.style.display = "block";
+}
+
 function verificarAlarmes() {
     const agora = new Date();
-    const disparadosAgora = [];
 
     tarefas.forEach(tarefa => {
         if (!tarefa.alarme || tarefa.status === "done" || tarefa.alarmeDisparado || !tarefa.dataTerminoCompleta) {
@@ -195,28 +235,18 @@ function verificarAlarmes() {
 
         if (agora >= inicioJanela) {
             tarefa.alarmeDisparado = true;
+            tarefa.alarmeDispensado = false;
             salvarConfigAlarmeCliente(tarefa.id, {
                 dataTerminoCompleta: tarefa.dataTerminoCompleta,
                 alarme: tarefa.alarme,
                 antecedenciaMinutos: tarefa.antecedenciaMinutos,
-                alarmeDisparado: true
+                alarmeDisparado: true,
+                alarmeDispensado: false
             });
-            disparadosAgora.push(tarefa);
         }
     });
 
-    if (disparadosAgora.length === 0) {
-        return;
-    }
-
-    const painel = obterOuCriarPainelAlarmes();
-    const lista = document.getElementById("lista-alarmes-disparados");
-    disparadosAgora.forEach(tarefa => {
-        const item = document.createElement("li");
-        item.textContent = `Tarefa "${tarefa.nome}" vence em ${formatarDataHoraExibicao(tarefa.dataTerminoCompleta)} (status: ${tarefa.status}).`;
-        lista.appendChild(item);
-    });
-    painel.style.display = "block";
+    renderizarPainelAlarmes();
 }
 
 async function carregarTarefas() {
@@ -415,7 +445,8 @@ async function atualizarTarefa(idTarefa, botaoClicado) {
             dataTerminoCompleta: novaDataCompleta,
             alarme: novoAlarme,
             antecedenciaMinutos: novaAntecedencia,
-            alarmeDisparado: reconfigurouAlarme ? false : Boolean(tarefaAnterior?.alarmeDisparado)
+            alarmeDisparado: reconfigurouAlarme ? false : Boolean(tarefaAnterior?.alarmeDisparado),
+            alarmeDispensado: reconfigurouAlarme ? false : Boolean(tarefaAnterior?.alarmeDispensado)
         });
 
         limparBannerErro();
@@ -514,7 +545,8 @@ function inicializarCriacaoTarefa() {
                 dataTerminoCompleta: dataHoraInput,
                 alarme: alarmeAtivo,
                 antecedenciaMinutos,
-                alarmeDisparado: false
+                alarmeDisparado: false,
+                alarmeDispensado: false
             });
 
             limparBannerErro();
