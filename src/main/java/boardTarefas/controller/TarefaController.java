@@ -15,7 +15,26 @@ import java.time.format.DateTimeFormatter;
 public class TarefaController {
     DateTimeFormatter formatoBR = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    private TarefaRepository repositorio = new TarefaRepository();
+    private final TarefaRepository repositorio;
+
+    public TarefaController() {
+        this(new TarefaRepository());
+    }
+
+    public TarefaController(TarefaRepository repositorio) {
+        this.repositorio = repositorio;
+    }
+
+    public String sanitizarTexto(String texto) {
+        if (texto == null) {
+            return "";
+        }
+        return texto.replace(";", ",")
+                .replace("\r\n", " ")
+                .replace("\n", " ")
+                .replace("\r", " ")
+                .trim();
+    }
 
     public void salvar(List<Tarefa> tarefas) {
         try {
@@ -35,8 +54,16 @@ public class TarefaController {
     }
 
     public List<Tarefa> criar (List<Tarefa> tarefas, int id, String nome, String descricao, LocalDate dataTermino, String status, int prioridade, String categoria){
-        Tarefa novaTarefa = new Tarefa(id,nome,descricao,dataTermino,status,prioridade,categoria);
-        tarefas.add((novaTarefa));
+        Tarefa novaTarefa = new Tarefa(
+                id,
+                sanitizarTexto(nome),
+                sanitizarTexto(descricao),
+                dataTermino,
+                status,
+                prioridade,
+                sanitizarTexto(categoria)
+        );
+        tarefas.add(novaTarefa);
         salvar(tarefas);
         return tarefas;
     }
@@ -44,45 +71,45 @@ public class TarefaController {
     public List<Tarefa> buscar (List<Tarefa> tarefas, String filtro, String opcao, LocalDate inicio, LocalDate fim) {
         List<Tarefa> tarefasBusca = new ArrayList<>();
 
-        if (filtro == "categoria" && inicio == null && fim == null) {
+        if ("categoria".equals(filtro) && inicio == null && fim == null) {
             for (Tarefa t : tarefas) {
-                if (t.getCategoria().equals(opcao)) {
+                if (Objects.equals(t.getCategoria(), opcao)) {
                     tarefasBusca.add(t);
                 }
             }
-        } else if (filtro == "categoria" && inicio != null && fim != null) {
+        } else if ("categoria".equals(filtro) && inicio != null && fim != null) {
             for (Tarefa t : tarefas) {
                 if ((t.getDataTermino().isAfter(inicio) || t.getDataTermino().isEqual(inicio)) &&
-                        (t.getDataTermino().isBefore(fim) || t.getDataTermino().isEqual(fim)) && t.getCategoria().equals(opcao)) {
+                        (t.getDataTermino().isBefore(fim) || t.getDataTermino().isEqual(fim)) && Objects.equals(t.getCategoria(), opcao)) {
                     tarefasBusca.add(t);
                 }
             }
 
-        } else if (filtro == "prioridade" && inicio == null && fim == null) {
+        } else if ("prioridade".equals(filtro) && inicio == null && fim == null) {
             for (Tarefa t : tarefas) {
                 if (t.getPrioridade() == parseInt(opcao, 10)) {
                     tarefasBusca.add(t);
                 }
             }
 
-        } else if (filtro == "prioridade" && inicio != null && fim != null) {
+        } else if ("prioridade".equals(filtro) && inicio != null && fim != null) {
             for (Tarefa t : tarefas) {
                 if ((t.getDataTermino().isAfter(inicio) || t.getDataTermino().isEqual(inicio)) &&
                         (t.getDataTermino().isBefore(fim) || t.getDataTermino().isEqual(fim)) && t.getPrioridade() == parseInt(opcao, 10)) {
                     tarefasBusca.add(t);
                 }
             }
-        } else if (filtro == "status" && inicio == null && fim == null) {
+        } else if ("status".equals(filtro) && inicio == null && fim == null) {
             for (Tarefa t : tarefas) {
-                if (t.getStatus() == opcao) {
+                if (Objects.equals(t.getStatus(), opcao)) {
                     tarefasBusca.add(t);
                 }
             }
 
-        } else if (filtro == "status" && inicio != null && fim != null) {
+        } else if ("status".equals(filtro) && inicio != null && fim != null) {
             for (Tarefa t : tarefas) {
                 if ((t.getDataTermino().isAfter(inicio) || t.getDataTermino().isEqual(inicio)) &&
-                        (t.getDataTermino().isBefore(fim) || t.getDataTermino().isEqual(fim)) && t.getStatus() == opcao) {
+                        (t.getDataTermino().isBefore(fim) || t.getDataTermino().isEqual(fim)) && Objects.equals(t.getStatus(), opcao)) {
                     tarefasBusca.add(t);
                 }
             }
@@ -117,17 +144,17 @@ public class TarefaController {
         Tarefa encontrado = buscar_id(tarefaId,tarefas);
 
         if (info != null && encontrado != null){
-            if (campo == "nome"){
-                encontrado.setNome(info);
-            } else if (campo == "descricao") {
-                encontrado.setDescricao(info);
-            } else if (campo == "prioridade"){
+            if ("nome".equals(campo)){
+                encontrado.setNome(sanitizarTexto(info));
+            } else if ("descricao".equals(campo)) {
+                encontrado.setDescricao(sanitizarTexto(info));
+            } else if ("prioridade".equals(campo)){
                 encontrado.setPrioridade(parseInt(info));
-            } else if (campo == "categoria") {
-                encontrado.setCategoria(info);
-            } else if (campo == "status"){
+            } else if ("categoria".equals(campo)) {
+                encontrado.setCategoria(sanitizarTexto(info));
+            } else if ("status".equals(campo)){
                 encontrado.setStatus(info);
-            } else if (campo == "data"){
+            } else if ("data".equals(campo)){
                 encontrado.setDataTermino(LocalDate.parse(info, formatoBR));
             }
 
@@ -162,6 +189,42 @@ public class TarefaController {
         salvar(tarefas);
         return tarefas;
 
+    }
+
+    public synchronized List<Tarefa> listarSincronizado() {
+        return carregar();
+    }
+
+    public synchronized List<Tarefa> buscarSincronizado(String filtro, String opcao, LocalDate inicio, LocalDate fim) {
+        return buscar(carregar(), filtro, opcao, inicio, fim);
+    }
+
+    public synchronized Tarefa criarSincronizado(String nome, String descricao, LocalDate dataTermino, String status, int prioridade, String categoria) {
+        List<Tarefa> tarefas = carregar();
+        int id = proximoId(tarefas);
+        criar(tarefas, id, nome, descricao, dataTermino, status, prioridade, categoria);
+        return buscar_id(id, tarefas);
+    }
+
+    public synchronized Tarefa atualizarSincronizado(int id, String nome, String descricao, LocalDate dataTermino, String status, int prioridade, String categoria) {
+        List<Tarefa> tarefas = carregar();
+        Tarefa encontrado = buscar_id(id, tarefas);
+        if (encontrado == null) {
+            return null;
+        }
+        encontrado.setNome(sanitizarTexto(nome));
+        encontrado.setDescricao(sanitizarTexto(descricao));
+        encontrado.setDataTermino(dataTermino);
+        encontrado.setStatus(status);
+        encontrado.setPrioridade(prioridade);
+        encontrado.setCategoria(sanitizarTexto(categoria));
+        salvar(tarefas);
+        return encontrado;
+    }
+
+    public synchronized boolean deletarSincronizado(int id) {
+        List<Tarefa> tarefas = carregar();
+        return deletar(tarefas, id) != null;
     }
 
 //    public void listarTodas (List<Tarefa> tarefas){

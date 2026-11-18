@@ -6,7 +6,7 @@ Este plano divide a implementação das duas features especificadas em [docs/spe
 
 ## Parte A — Feature 1: API HTTP Local e Sincronização Frontend/Backend
 
-- [ ] **1. Preparar `TarefaRepository` para concorrência e arquivo vazio/ausente**
+- [x] **1. Preparar `TarefaRepository` para concorrência e arquivo vazio/ausente**
   - **O que será feito:** Tornar `carregar()` e `salvar(List<Tarefa>)` `synchronized` e ignorar linhas em branco ao ler `src/main/resources/historico.txt`, retornando lista vazia sem exceção quando o arquivo não existir ou estiver vazio (mantendo o formato `;`, `dd/MM/yyyy` e a ordenação por prioridade decrescente).
   - **Arquivos criados ou alterados:**
     - Alterar: `src/main/java/boardTarefas/repository/TarefaRepository.java`
