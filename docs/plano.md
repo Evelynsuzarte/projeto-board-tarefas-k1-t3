@@ -14,7 +14,7 @@ Este plano divide a implementação das duas features especificadas em [docs/spe
     - Executar `.\gradlew.bat classes` para garantir compilação sem erros.
     - Conferir nos testes unitários da Tarefa 5 que um arquivo vazio ou ausente retorna `[]` sem lançar exceção.
 
-- [ ] **2. Adequar `TarefaController` para reuso pela API HTTP com a mesma lógica do terminal**
+- [x] **2. Adequar `TarefaController` para reuso pela API HTTP com a mesma lógica do terminal**
   - **O que será feito:**
     - Substituir comparações de `String` com `==` por `.equals(...)` em `buscar(...)` e `alterar(...)` para funcionar igualmente com entradas do `Scanner` e da API HTTP.
     - Adicionar helper de sanitização de texto (`;` → `,` e `\r`/`\n` → espaço) aplicado na criação e alteração.
